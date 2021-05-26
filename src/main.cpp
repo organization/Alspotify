@@ -1,10 +1,17 @@
 #include <QApplication>
-#include <QPushButton>
+#include <drogon/drogon.h>
+#include "AlspotifyCtrl.h"
 
 int main(int argc, char *argv[]) {
-    QApplication a(argc, argv);
-    QPushButton button("Hello world!", nullptr);
-    button.resize(200, 100);
-    button.show();
-    return QApplication::exec();
+    QApplication qApplication(argc, argv);
+    auto ctrl = std::make_shared<AlspotifyCtrl>();
+    ctrl->start();
+    drogon::app()
+            .setLogPath(".")
+            .setLogLevel(trantor::Logger::kWarn)
+            .addListener("127.0.0.1", 29192) //TODO: loadConfigFile("./config.json")
+            .setThreadNum(1)
+            .run();
+    QApplication::exec();
+    return ctrl->end();
 }
